@@ -1,4 +1,14 @@
-package kegare.craftingex.inventory;
+/*
+ * Crafting EX
+ *
+ * Copyright (c) 2014 kegare
+ * https://github.com/kegare
+ *
+ * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
+ * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ */
+
+package com.kegare.craftingex.inventory;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -15,10 +25,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiCraftingEX extends GuiContainer
 {
+	private static final ResourceLocation craftingTableGuiTextures = new ResourceLocation("textures/gui/container/crafting_table.png");
+
 	private final ContainerCraftingEX container;
 
-	private GuiButton nextButton;
 	private GuiButton prevButton;
+	private GuiButton nextButton;
 
 	public GuiCraftingEX(InventoryPlayer inventory, World world, int x, int y, int z)
 	{
@@ -44,26 +56,26 @@ public class GuiCraftingEX extends GuiContainer
 
 		if (container.isRecipes())
 		{
-			if (!buttonList.contains(nextButton))
-			{
-				buttonList.add(nextButton);
-			}
-
 			if (!buttonList.contains(prevButton))
 			{
 				buttonList.add(prevButton);
 			}
+
+			if (!buttonList.contains(nextButton))
+			{
+				buttonList.add(nextButton);
+			}
 		}
 		else
 		{
-			if (buttonList.contains(nextButton))
-			{
-				buttonList.remove(nextButton);
-			}
-
 			if (buttonList.contains(prevButton))
 			{
 				buttonList.remove(prevButton);
+			}
+
+			if (buttonList.contains(nextButton))
+			{
+				buttonList.remove(nextButton);
 			}
 		}
 	}
@@ -71,15 +83,15 @@ public class GuiCraftingEX extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		fontRenderer.drawString(I18n.getString("container.crafting") + " EX", 28, 6, 0x333333);
-		fontRenderer.drawString(I18n.getString("container.inventory"), 8, ySize - 96 + 2, 0x404040);
+		fontRendererObj.drawString(I18n.format("container.crafting") + " EX", 28, 6, 0x333333);
+		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 0x404040);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(new ResourceLocation("textures/gui/container/crafting_table.png"));
+		mc.getTextureManager().bindTexture(craftingTableGuiTextures);
 		int var1 = (width - xSize) / 2;
 		int var2 = (height - ySize) / 2;
 		drawTexturedModalRect(var1, var2, 0, 0, xSize, ySize);

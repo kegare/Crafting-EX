@@ -1,4 +1,14 @@
-package kegare.craftingex.crafting;
+/*
+ * Crafting EX
+ *
+ * Copyright (c) 2014 kegare
+ * https://github.com/kegare
+ *
+ * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
+ * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ */
+
+package com.kegare.craftingex.crafting;
 
 import java.util.List;
 
@@ -15,7 +25,7 @@ public class CraftingManagerEX
 {
 	private static final CraftingManagerEX instance = new CraftingManagerEX();
 
-	private List<IRecipe> recipes = Lists.newArrayList();
+	private final List<IRecipe> recipes = Lists.newArrayList();
 
 	public static final CraftingManagerEX getInstance()
 	{
@@ -48,8 +58,7 @@ public class CraftingManagerEX
 			{
 				itemstack1 = itemstack;
 			}
-
-			if (i == 1)
+			else if (i == 1)
 			{
 				itemstack2 = itemstack;
 			}
@@ -57,12 +66,12 @@ public class CraftingManagerEX
 			++i;
 		}
 
-		if (i == 2 && itemstack1.itemID == itemstack2.itemID && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && Item.itemsList[itemstack1.itemID].isDamageable())
+		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && itemstack1.getItem().isDamageable())
 		{
-			Item item = Item.itemsList[itemstack1.itemID];
+			Item item = itemstack1.getItem();
 			int var1 = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
 			int var2 = item.getMaxDamage() - itemstack2.getItemDamageForDisplay();
-			int var3 = var1 + var2 + (item.getMaxDamage() * 10) / 100;
+			int var3 = var1 + var2 + item.getMaxDamage() * 10 / 100;
 			int var4 = item.getMaxDamage() - var3;
 
 			if (var4 < 0)
@@ -70,7 +79,7 @@ public class CraftingManagerEX
 				var4 = 0;
 			}
 
-			result.add(new ItemStack(itemstack1.itemID, 1, var4));
+			result.add(new ItemStack(item, 1, var4));
 
 			return result;
 		}

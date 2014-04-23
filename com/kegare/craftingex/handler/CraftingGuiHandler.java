@@ -1,9 +1,21 @@
-package kegare.craftingex.handler;
+/*
+ * Crafting EX
+ *
+ * Copyright (c) 2014 kegare
+ * https://github.com/kegare
+ *
+ * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
+ * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ */
 
-import kegare.craftingex.inventory.ContainerCraftingEX;
-import kegare.craftingex.inventory.GuiCraftingEX;
+package com.kegare.craftingex.handler;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
+import com.kegare.craftingex.inventory.ContainerCraftingEX;
+import com.kegare.craftingex.inventory.GuiCraftingEX;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CraftingGuiHandler implements IGuiHandler

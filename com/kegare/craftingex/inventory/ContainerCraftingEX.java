@@ -1,21 +1,30 @@
-package kegare.craftingex.inventory;
+/*
+ * Crafting EX
+ *
+ * Copyright (c) 2014 kegare
+ * https://github.com/kegare
+ *
+ * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
+ * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
+ */
+
+package com.kegare.craftingex.inventory;
 
 import java.util.List;
 
-import kegare.craftingex.crafting.CraftingManagerEX;
-import kegare.craftingex.handler.CraftingPacketHandler;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import com.kegare.craftingex.core.CraftingEX;
+import com.kegare.craftingex.crafting.CraftingManagerEX;
+import com.kegare.craftingex.packet.NextRecipePacket;
+
 public class ContainerCraftingEX extends ContainerWorkbench
 {
 	private final World world;
-	private final EntityPlayer player;
 
 	private List<ItemStack> recipes;
 	private int recipeSize;
@@ -25,7 +34,6 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	{
 		super(inventory, world, x, y, z);
 		this.world = world;
-		this.player = inventory.player;
 	}
 
 	@Override
@@ -70,7 +78,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	{
 		if (world.isRemote)
 		{
-			((EntityClientPlayerMP)player).sendQueue.addToSendQueue(CraftingPacketHandler.getPacketNextRecipe(id));
+			CraftingEX.packetPipeline.sendPacketToServer(new NextRecipePacket(id));
 		}
 
 		if (id == 0)
