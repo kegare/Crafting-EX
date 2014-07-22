@@ -18,9 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.kegare.craftingex.core.CraftingEX;
 import com.kegare.craftingex.crafting.CraftingManagerEX;
-import com.kegare.craftingex.packet.NextRecipePacket;
 
 public class ContainerCraftingEX extends ContainerWorkbench
 {
@@ -71,23 +69,6 @@ public class ContainerCraftingEX extends ContainerWorkbench
 			recipeSize = -1;
 			currentIndex = -1;
 			craftResult.setInventorySlotContents(0, null);
-		}
-	}
-
-	public void actionPerformed(int id)
-	{
-		if (world.isRemote)
-		{
-			CraftingEX.packetPipeline.sendPacketToServer(new NextRecipePacket(id));
-		}
-
-		if (id == 0)
-		{
-			nextRecipe(1);
-		}
-		else if (id == 1)
-		{
-			nextRecipe(-1);
 		}
 	}
 

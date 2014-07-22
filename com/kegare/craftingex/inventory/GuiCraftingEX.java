@@ -19,6 +19,9 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import com.kegare.craftingex.core.CraftingEX;
+import com.kegare.craftingex.network.NextRecipeMessage;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,10 +46,8 @@ public class GuiCraftingEX extends GuiContainer
 	{
 		super.initGui();
 
-		int var1 = (width - xSize) / 2;
-		int var2 = (height - ySize) / 2;
-		prevButton = new GuiButton(0, var1 + 105, var2 + 60, 20 , 20 , "<");
-		nextButton = new GuiButton(1, var1 + 135, var2 + 60, 20 , 20 , ">");
+		prevButton = new GuiButton(0, guiLeft + 105, guiTop + 60, 20 , 20 , "<");
+		nextButton = new GuiButton(1, guiLeft + 135, guiTop + 60, 20 , 20 , ">");
 	}
 
 	@Override
@@ -83,8 +84,8 @@ public class GuiCraftingEX extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		fontRendererObj.drawString(I18n.format("container.crafting") + " EX", 28, 6, 0x333333);
-		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 0x404040);
+		fontRendererObj.drawString(I18n.format("container.crafting") + " EX", 28, 6, 0x404040);
+		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 94, 0x404040);
 	}
 
 	@Override
@@ -92,9 +93,7 @@ public class GuiCraftingEX extends GuiContainer
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(craftingTableGuiTextures);
-		int var1 = (width - xSize) / 2;
-		int var2 = (height - ySize) / 2;
-		drawTexturedModalRect(var1, var2, 0, 0, xSize, ySize);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	@Override
@@ -105,6 +104,20 @@ public class GuiCraftingEX extends GuiContainer
 			return;
 		}
 
-		container.actionPerformed(button.id);
+		int next;
+
+		if (button.id == 0)
+		{
+			next = 1;
+		}
+		else if (button.id == 1)
+		{
+			next = -1;
+		}
+		else return;
+
+		CraftingEX.network.sendToServer(new NextRecipeMessage(next));
+
+		container.nextRecipe(next);
 	}
 }

@@ -10,42 +10,38 @@
 
 package com.kegare.craftingex.core;
 
+import static com.kegare.craftingex.core.CraftingEX.*;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.kegare.craftingex.handler.CraftingEventHooks;
 import com.kegare.craftingex.handler.CraftingGuiHandler;
-import com.kegare.craftingex.packet.NextRecipePacket;
-import com.kegare.craftingex.packet.PacketPipeline;
+import com.kegare.craftingex.network.NextRecipeMessage;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "kegare.craftingex")
+@Mod(modid = MODID)
 public class CraftingEX
 {
-	public static final PacketPipeline packetPipeline = new PacketPipeline();
+	public static final String MODID = "kegare.craftingex";
 
-	@Instance("kegare.craftingex")
+	@Instance(MODID)
 	public static CraftingEX instance;
 
+	public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MODID);
+
 	@EventHandler
-	public void init(FMLInitializationEvent event)
+	public void preInit(FMLPreInitializationEvent event)
 	{
+		network.registerMessage(NextRecipeMessage.class, NextRecipeMessage.class, 0, Side.SERVER);
+
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CraftingGuiHandler());
 
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHooks());
-
-		packetPipeline.init("kegare.craftingex");
-		packetPipeline.registerPacket(NextRecipePacket.class);
-	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		packetPipeline.postInit();
 	}
 }

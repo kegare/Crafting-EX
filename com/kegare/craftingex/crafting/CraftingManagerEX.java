@@ -96,9 +96,7 @@ public class CraftingManagerEX
 		{
 			return null;
 		}
-		else
-		{
-			return result;
-		}
+
+		return result;
 	}
 }
