@@ -25,8 +25,6 @@ public class CraftingManagerEX
 {
 	private static final CraftingManagerEX instance = new CraftingManagerEX();
 
-	private final List<IRecipe> recipes = Lists.newArrayList();
-
 	public static final CraftingManagerEX getInstance()
 	{
 		return instance;
@@ -34,11 +32,6 @@ public class CraftingManagerEX
 
 	public List<ItemStack> findMatchingRecipe(InventoryCrafting crafting, World world)
 	{
-		if (recipes.isEmpty())
-		{
-			recipes.addAll(CraftingManager.getInstance().getRecipeList());
-		}
-
 		List<ItemStack> result = Lists.newArrayList();
 
 		int i = 0;
@@ -84,11 +77,14 @@ public class CraftingManagerEX
 			return result;
 		}
 
-		for (IRecipe recipe : recipes)
+		for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{
-			if (recipe.matches(crafting, world))
+			if (obj instanceof IRecipe)
 			{
-				result.add(recipe.getCraftingResult(crafting));
+				if (((IRecipe)obj).matches(crafting, world))
+				{
+					result.add(((IRecipe)obj).getCraftingResult(crafting));
+				}
 			}
 		}
 

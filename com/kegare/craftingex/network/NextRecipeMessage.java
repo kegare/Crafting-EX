@@ -11,7 +11,7 @@
 package com.kegare.craftingex.network;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.kegare.craftingex.inventory.ContainerCraftingEX;
 
@@ -45,9 +45,9 @@ public class NextRecipeMessage implements IMessage, IMessageHandler<NextRecipeMe
 	@Override
 	public IMessage onMessage(NextRecipeMessage message, MessageContext ctx)
 	{
-		EntityPlayer player = ctx.getServerHandler().playerEntity;
+		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 
-		if (player.openContainer instanceof ContainerCraftingEX)
+		if (player.openContainer != null && player.openContainer instanceof ContainerCraftingEX)
 		{
 			((ContainerCraftingEX)player.openContainer).nextRecipe(message.next);
 		}

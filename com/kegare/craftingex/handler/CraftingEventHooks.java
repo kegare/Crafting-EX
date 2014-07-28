@@ -10,35 +10,36 @@
 
 package com.kegare.craftingex.handler;
 
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 
 import com.kegare.craftingex.core.CraftingEX;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CraftingEventHooks
 {
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent event)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void doOpenCraftingEX(PlayerInteractEvent event)
 	{
-		if (event.gui != null && event.gui.getClass() == GuiCrafting.class)
+		if (event.action == Action.RIGHT_CLICK_BLOCK && event.entityPlayer instanceof EntityPlayerMP)
 		{
-			EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
-			World world = player.worldObj;
-			int x = Math.round((float)player.posX);
-			int y = Math.round((float)player.posY);
-			int z = Math.round((float)player.posZ);
+			EntityPlayerMP player = (EntityPlayerMP)event.entityPlayer;
+			WorldServer world = player.getServerForPlayer();
+			int x = event.x;
+			int y = event.y;
+			int z = event.z;
 
-			player.openGui(CraftingEX.instance, 0, world, x, y, z);
+			if (world.getBlock(x, y, z) == Blocks.crafting_table && (!player.isSneaking() || player.getHeldItem() == null || player.getHeldItem().getItem().doesSneakBypassUse(world, x, y, z, player)))
+			{
+				player.openGui(CraftingEX.instance, 0, world, x, y, z);
 
-			event.setCanceled(true);
+				event.setCanceled(true);
+			}
 		}
 	}
 }
