@@ -46,8 +46,8 @@ public class GuiCraftingEX extends GuiContainer
 	{
 		super.initGui();
 
-		prevButton = new GuiButton(0, guiLeft + 105, guiTop + 60, 20 , 20 , "<");
-		nextButton = new GuiButton(1, guiLeft + 135, guiTop + 60, 20 , 20 , ">");
+		prevButton = new GuiButton(0, guiLeft + 105, guiTop + 60, 20, 20, "<");
+		nextButton = new GuiButton(1, guiLeft + 135, guiTop + 60, 20, 20, ">");
 	}
 
 	@Override
@@ -112,15 +112,17 @@ public class GuiCraftingEX extends GuiContainer
 
 		int next;
 
-		if (button.id == 0)
+		switch (button.id)
 		{
-			next = 1;
+			case 0:
+				next = 1;
+				break;
+			case 1:
+				next = -1;
+				break;
+			default:
+				return;
 		}
-		else if (button.id == 1)
-		{
-			next = -1;
-		}
-		else return;
 
 		CraftingEX.network.sendToServer(new NextRecipeMessage(next));
 

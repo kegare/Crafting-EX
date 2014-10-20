@@ -13,13 +13,18 @@ package com.kegare.craftingex.core;
 import static com.kegare.craftingex.core.CraftingEX.*;
 import net.minecraftforge.common.MinecraftForge;
 
+import org.apache.logging.log4j.Level;
+
 import com.kegare.craftingex.handler.CraftingEventHooks;
 import com.kegare.craftingex.handler.CraftingGuiHandler;
 import com.kegare.craftingex.network.NextRecipeMessage;
+import com.kegare.craftingex.plugin.nei.NEIPlugin;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -43,5 +48,21 @@ public class CraftingEX
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CraftingGuiHandler());
 
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHooks());
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event)
+	{
+		try
+		{
+			if (NEIPlugin.enabled())
+			{
+				NEIPlugin.invoke();
+			}
+		}
+		catch (Throwable e)
+		{
+			FMLLog.log(Level.WARN, e, "Failed to trying invoke plugin: NEIPlugin");
+		}
 	}
 }
