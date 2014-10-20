@@ -25,8 +25,9 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	private final World world;
 
 	private List<ItemStack> recipes;
-	private int recipeSize;
-	private int currentIndex;
+
+	protected int recipeSize;
+	protected int currentIndex;
 
 	public ContainerCraftingEX(InventoryPlayer inventory, World world, int x, int y, int z)
 	{

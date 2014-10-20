@@ -42,29 +42,28 @@ public class CraftingManagerEX
 		{
 			ItemStack itemstack = crafting.getStackInSlot(j);
 
-			if (itemstack == null)
+			if (itemstack != null)
 			{
-				continue;
-			}
+				if (i == 0)
+				{
+					itemstack1 = itemstack;
+				}
 
-			if (i == 0)
-			{
-				itemstack1 = itemstack;
-			}
-			else if (i == 1)
-			{
-				itemstack2 = itemstack;
-			}
+				if (i == 1)
+				{
+					itemstack2 = itemstack;
+				}
 
-			++i;
+				++i;
+			}
 		}
 
-		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && itemstack1.getItem().isDamageable())
+		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && itemstack1.getItem().isRepairable())
 		{
 			Item item = itemstack1.getItem();
 			int var1 = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
 			int var2 = item.getMaxDamage() - itemstack2.getItemDamageForDisplay();
-			int var3 = var1 + var2 + item.getMaxDamage() * 10 / 100;
+			int var3 = var1 + var2 + item.getMaxDamage() * 5 / 100;
 			int var4 = item.getMaxDamage() - var3;
 
 			if (var4 < 0)

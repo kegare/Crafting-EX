@@ -12,6 +12,8 @@ package com.kegare.craftingex.handler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
@@ -36,9 +38,14 @@ public class CraftingEventHooks
 
 			if (world.getBlock(x, y, z) == Blocks.crafting_table && (!player.isSneaking() || player.getHeldItem() == null || player.getHeldItem().getItem().doesSneakBypassUse(world, x, y, z, player)))
 			{
-				player.openGui(CraftingEX.instance, 0, world, x, y, z);
+				ItemStack current = player.getCurrentEquippedItem();
 
-				event.setCanceled(true);
+				if (current == null || current.getItem() != Item.getItemFromBlock(Blocks.crafting_table))
+				{
+					player.openGui(CraftingEX.instance, 0, world, x, y, z);
+
+					event.setCanceled(true);
+				}
 			}
 		}
 	}

@@ -86,6 +86,12 @@ public class GuiCraftingEX extends GuiContainer
 	{
 		fontRendererObj.drawString(I18n.format("container.crafting") + " EX", 28, 6, 0x404040);
 		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 94, 0x404040);
+
+		if (container.recipeSize > 1)
+		{
+			String str = container.currentIndex + 1 + " / " + container.recipeSize;
+			fontRendererObj.drawString(str, xSize - fontRendererObj.getStringWidth(str) - 10, 6, 0x707070);
+		}
 	}
 
 	@Override
