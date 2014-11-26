@@ -14,14 +14,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.kegare.craftingex.core.CraftingEX;
-
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class CraftingEventHooks
 {
@@ -32,17 +32,15 @@ public class CraftingEventHooks
 		{
 			EntityPlayerMP player = (EntityPlayerMP)event.entityPlayer;
 			WorldServer world = player.getServerForPlayer();
-			int x = event.x;
-			int y = event.y;
-			int z = event.z;
+			BlockPos pos = event.pos;
 
-			if (world.getBlock(x, y, z) == Blocks.crafting_table && (!player.isSneaking() || player.getHeldItem() == null || player.getHeldItem().getItem().doesSneakBypassUse(world, x, y, z, player)))
+			if (world.getBlockState(pos).getBlock() == Blocks.crafting_table && (!player.isSneaking() || player.getHeldItem() == null || player.getHeldItem().getItem().doesSneakBypassUse(world, pos, player)))
 			{
 				ItemStack current = player.getCurrentEquippedItem();
 
 				if (current == null || current.getItem() != Item.getItemFromBlock(Blocks.crafting_table))
 				{
-					player.openGui(CraftingEX.instance, 0, world, x, y, z);
+					player.openGui(CraftingEX.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 
 					event.setCanceled(true);
 				}

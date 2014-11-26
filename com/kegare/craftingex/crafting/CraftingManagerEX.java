@@ -61,8 +61,8 @@ public class CraftingManagerEX
 		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && itemstack1.getItem().isRepairable())
 		{
 			Item item = itemstack1.getItem();
-			int var1 = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
-			int var2 = item.getMaxDamage() - itemstack2.getItemDamageForDisplay();
+			int var1 = item.getMaxDamage() - itemstack1.getItemDamage();
+			int var2 = item.getMaxDamage() - itemstack2.getItemDamage();
 			int var3 = var1 + var2 + item.getMaxDamage() * 5 / 100;
 			int var4 = item.getMaxDamage() - var3;
 

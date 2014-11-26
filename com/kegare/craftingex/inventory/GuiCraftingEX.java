@@ -14,16 +14,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
 import com.kegare.craftingex.core.CraftingEX;
 import com.kegare.craftingex.network.NextRecipeMessage;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiCraftingEX extends GuiContainer
@@ -35,9 +35,9 @@ public class GuiCraftingEX extends GuiContainer
 	private GuiButton prevButton;
 	private GuiButton nextButton;
 
-	public GuiCraftingEX(InventoryPlayer inventory, World world, int x, int y, int z)
+	public GuiCraftingEX(InventoryPlayer inventory, World world, BlockPos pos)
 	{
-		super(new ContainerCraftingEX(inventory, world, x, y, z));
+		super(new ContainerCraftingEX(inventory, world, pos));
 		this.container = (ContainerCraftingEX)inventorySlots;
 	}
 

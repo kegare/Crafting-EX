@@ -16,6 +16,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.kegare.craftingex.crafting.CraftingManagerEX;
@@ -29,9 +30,9 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	protected int recipeSize;
 	protected int currentIndex;
 
-	public ContainerCraftingEX(InventoryPlayer inventory, World world, int x, int y, int z)
+	public ContainerCraftingEX(InventoryPlayer inventory, World world, BlockPos pos)
 	{
-		super(inventory, world, x, y, z);
+		super(inventory, world, pos);
 		this.world = world;
 	}
 

@@ -11,12 +11,12 @@
 package com.kegare.craftingex.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import com.kegare.craftingex.inventory.ContainerCraftingEX;
 import com.kegare.craftingex.inventory.GuiCraftingEX;
-
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CraftingGuiHandler implements IGuiHandler
 {
@@ -25,7 +25,7 @@ public class CraftingGuiHandler implements IGuiHandler
 	{
 		if (ID == 0)
 		{
-			return new ContainerCraftingEX(player.inventory, world, x, y, z);
+			return new ContainerCraftingEX(player.inventory, world, new BlockPos(x, y, z));
 		}
 
 		return null;
@@ -36,7 +36,7 @@ public class CraftingGuiHandler implements IGuiHandler
 	{
 		if (ID == 0)
 		{
-			return new GuiCraftingEX(player.inventory, world, x, y, z);
+			return new GuiCraftingEX(player.inventory, world, new BlockPos(x, y, z));
 		}
 
 		return null;
