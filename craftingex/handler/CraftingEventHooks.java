@@ -8,7 +8,7 @@
  * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 
-package com.kegare.craftingex.handler;
+package craftingex.handler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -20,13 +20,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.kegare.craftingex.core.CraftingEX;
+import craftingex.core.CraftingEX;
 
 public class CraftingEventHooks
 {
+	public static final CraftingEventHooks instance = new CraftingEventHooks();
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void doOpenCraftingEX(PlayerInteractEvent event)
+	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		if (event.action == Action.RIGHT_CLICK_BLOCK && event.entityPlayer instanceof EntityPlayerMP)
 		{

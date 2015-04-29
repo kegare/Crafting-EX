@@ -8,15 +8,14 @@
  * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 
-package com.kegare.craftingex.network;
+package craftingex.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.kegare.craftingex.inventory.ContainerCraftingEX;
+import craftingex.inventory.ContainerCraftingEX;
 
 public class NextRecipeMessage implements IMessage, IMessageHandler<NextRecipeMessage, IMessage>
 {

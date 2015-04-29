@@ -8,15 +8,16 @@
  * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 
-package com.kegare.craftingex.handler;
+package craftingex.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import com.kegare.craftingex.inventory.ContainerCraftingEX;
-import com.kegare.craftingex.inventory.GuiCraftingEX;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import craftingex.client.gui.GuiCraftingEX;
+import craftingex.inventory.ContainerCraftingEX;
 
 public class CraftingGuiHandler implements IGuiHandler
 {
@@ -31,6 +32,7 @@ public class CraftingGuiHandler implements IGuiHandler
 		return null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{

@@ -8,7 +8,7 @@
  * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 
-package com.kegare.craftingex.crafting;
+package craftingex.crafting;
 
 import java.util.List;
 
@@ -38,20 +38,22 @@ public class CraftingManagerEX
 		ItemStack itemstack1 = null;
 		ItemStack itemstack2 = null;
 
-		for (int j = 0; j < crafting.getSizeInventory(); ++j)
+		outside: for (int j = 0; j < crafting.getSizeInventory(); ++j)
 		{
 			ItemStack itemstack = crafting.getStackInSlot(j);
 
 			if (itemstack != null)
 			{
-				if (i == 0)
+				switch (i)
 				{
-					itemstack1 = itemstack;
-				}
-
-				if (i == 1)
-				{
-					itemstack2 = itemstack;
+					case 0:
+						itemstack1 = itemstack;
+						break;
+					case 1:
+						itemstack2 = itemstack;
+						break;
+					default:
+						break outside;
 				}
 
 				++i;
@@ -76,13 +78,28 @@ public class CraftingManagerEX
 			return result;
 		}
 
-		for (Object obj : CraftingManager.getInstance().getRecipeList())
+		search: for (Object obj : CraftingManager.getInstance().getRecipeList())
 		{
 			if (obj instanceof IRecipe)
 			{
-				if (((IRecipe)obj).matches(crafting, world))
+				IRecipe recipe = (IRecipe)obj;
+
+				if (recipe.matches(crafting, world))
 				{
-					result.add(((IRecipe)obj).getCraftingResult(crafting));
+					itemstack1 = recipe.getCraftingResult(crafting);
+
+					if (itemstack1 != null && !result.contains(itemstack1))
+					{
+						for (ItemStack item : result)
+						{
+							if (ItemStack.areItemStacksEqual(item, itemstack1))
+							{
+								continue search;
+							}
+						}
+
+						result.add(itemstack1);
+					}
 				}
 			}
 		}

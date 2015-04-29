@@ -8,7 +8,7 @@
  * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
  */
 
-package com.kegare.craftingex.inventory;
+package craftingex.inventory;
 
 import java.util.List;
 
@@ -18,8 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
-import com.kegare.craftingex.crafting.CraftingManagerEX;
+import craftingex.crafting.CraftingManagerEX;
 
 public class ContainerCraftingEX extends ContainerWorkbench
 {
@@ -27,8 +26,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 
 	private List<ItemStack> recipes;
 
-	protected int recipeSize;
-	protected int currentIndex;
+	private int recipeSize, currentIndex;
 
 	public ContainerCraftingEX(InventoryPlayer inventory, World world, BlockPos pos)
 	{
@@ -39,20 +37,20 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	@Override
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
-		List<ItemStack> oldRecipes = recipes;
+		List<ItemStack> prev = recipes;
 		recipes = CraftingManagerEX.getInstance().findMatchingRecipe(craftMatrix, world);
 
 		if (recipes != null)
 		{
-			if (oldRecipes != null)
+			if (prev != null)
 			{
-				ItemStack checkstack = oldRecipes.get(currentIndex);
+				ItemStack item = prev.get(currentIndex);
 
-				if (checkstack != null)
+				if (item != null)
 				{
 					for (ItemStack itemstack : recipes)
 					{
-						if (itemstack != null && checkstack.isItemEqual(itemstack))
+						if (itemstack != null && item.isItemEqual(itemstack))
 						{
 							craftResult.setInventorySlotContents(0, recipes.get(currentIndex));
 
@@ -85,8 +83,39 @@ public class ContainerCraftingEX extends ContainerWorkbench
 		craftResult.setInventorySlotContents(0, recipes.get(currentIndex));
 	}
 
+	public ItemStack getNextRecipe(int value)
+	{
+		if (currentIndex < 0)
+		{
+			return null;
+		}
+
+		return recipes.get((currentIndex + value + recipeSize) % recipeSize);
+	}
+
 	public boolean isRecipes()
 	{
 		return recipeSize > 1;
+	}
+
+	public List<ItemStack> getRecipes()
+	{
+		return recipes;
+	}
+
+	public int getRecipeSize()
+	{
+		return recipeSize;
+	}
+
+	public int getCurrentIndex()
+	{
+		return currentIndex;
+	}
+
+	public void resetCurrentIndex()
+	{
+		currentIndex = 0;
+		craftResult.setInventorySlotContents(0, recipes.get(0));
 	}
 }
