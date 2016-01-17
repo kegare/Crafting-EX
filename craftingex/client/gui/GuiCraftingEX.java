@@ -13,6 +13,15 @@ package craftingex.client.gui;
 import java.io.IOException;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import com.google.common.collect.Lists;
+
+import craftingex.core.CraftingEX;
+import craftingex.inventory.ContainerCraftingEX;
+import craftingex.network.NextRecipeMessage;
+import craftingex.network.OpenCraftingMessage;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,16 +37,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
-import com.google.common.collect.Lists;
-
-import craftingex.core.CraftingEX;
-import craftingex.inventory.ContainerCraftingEX;
-import craftingex.network.NextRecipeMessage;
-import craftingex.network.OpenCraftingMessage;
 
 @SideOnly(Side.CLIENT)
 public class GuiCraftingEX extends GuiContainer
@@ -246,7 +245,7 @@ public class GuiCraftingEX extends GuiContainer
 
 			for (int i = 0; i < items.length; ++i)
 			{
-				items[i] = container.craftMatrix.getStackInSlotOnClosing(i);
+				items[i] = container.craftMatrix.removeStackFromSlot(i);
 			}
 
 			CraftingEX.network.sendToServer(new OpenCraftingMessage(pos, items));

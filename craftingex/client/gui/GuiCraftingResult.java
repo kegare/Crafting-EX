@@ -15,15 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.common.registry.GameData;
-
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.base.Predicate;
@@ -33,6 +24,14 @@ import com.google.common.collect.Lists;
 
 import craftingex.core.CraftingEX;
 import craftingex.util.ArrayListExtended;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.common.registry.GameData;
 
 public class GuiCraftingResult extends GuiScreen
 {
@@ -261,6 +260,8 @@ public class GuiCraftingResult extends GuiScreen
 
 		protected int nameType;
 
+		private boolean clickFlag;
+
 		public ItemList()
 		{
 			super(GuiCraftingResult.this.mc, 0, 0, 0, 0, 22);
@@ -309,11 +310,21 @@ public class GuiCraftingResult extends GuiScreen
 		@Override
 		protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
 		{
+			if (clickFlag = !clickFlag == false)
+			{
+				return;
+			}
+
 			ItemStack entry = contents.get(slotIndex, null);
 
 			if (entry != null)
 			{
 				selected = entry;
+			}
+
+			if (isDoubleClick && selected != null)
+			{
+				GuiCraftingResult.this.actionPerformed(GuiCraftingResult.this.doneButton);
 			}
 		}
 
@@ -328,7 +339,7 @@ public class GuiCraftingResult extends GuiScreen
 		@Override
 		protected void drawBackground()
 		{
-			drawDefaultBackground();
+			GuiCraftingResult.this.drawDefaultBackground();
 		}
 
 		@Override
@@ -363,16 +374,16 @@ public class GuiCraftingResult extends GuiScreen
 
 			if (!Strings.isNullOrEmpty(name))
 			{
-				drawCenteredString(fontRendererObj, name, width / 2, par3 + 3, 0xFFFFFF);
+				GuiCraftingResult.this.drawCenteredString(GuiCraftingResult.this.fontRendererObj, name, width / 2, par3 + 3, 0xFFFFFF);
 			}
 
 			RenderHelper.enableGUIStandardItemLighting();
 			int x = width / 2 - 100;
 			int y = par3 + 1;
-			itemRender.zLevel = 100.0F;
-			itemRender.renderItemAndEffectIntoGUI(entry, x, y);
-			itemRender.renderItemOverlays(fontRendererObj, entry, x, y);
-			itemRender.zLevel = 0.0F;
+			GuiCraftingResult.this.itemRender.zLevel = 100.0F;
+			GuiCraftingResult.this.itemRender.renderItemAndEffectIntoGUI(entry, x, y);
+			GuiCraftingResult.this.itemRender.renderItemOverlays(GuiCraftingResult.this.fontRendererObj, entry, x, y);
+			GuiCraftingResult.this.itemRender.zLevel = 0.0F;
 			RenderHelper.disableStandardItemLighting();
 		}
 

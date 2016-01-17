@@ -14,9 +14,17 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.Level;
+
+import com.google.common.base.Strings;
+
+import craftingex.handler.CraftingEventHooks;
+import craftingex.handler.CraftingGuiHandler;
+import craftingex.network.NextRecipeMessage;
+import craftingex.network.OpenCraftingMessage;
+import craftingex.plugin.nei.NEIPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -29,16 +37,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.relauncher.Side;
-
-import org.apache.logging.log4j.Level;
-
-import com.google.common.base.Strings;
-
-import craftingex.handler.CraftingEventHooks;
-import craftingex.handler.CraftingGuiHandler;
-import craftingex.network.NextRecipeMessage;
-import craftingex.network.OpenCraftingMessage;
-import craftingex.plugin.nei.NEIPlugin;
 
 @Mod(modid = "craftingex")
 public class CraftingEX
@@ -61,8 +59,6 @@ public class CraftingEX
 	public void init(FMLInitializationEvent event)
 	{
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new CraftingGuiHandler());
-
-		FMLCommonHandler.instance().bus().register(CraftingEventHooks.instance);
 
 		MinecraftForge.EVENT_BUS.register(CraftingEventHooks.instance);
 	}
