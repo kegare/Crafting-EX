@@ -1,13 +1,3 @@
-/*
- * Crafting EX
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
- */
-
 package craftingex.util;
 
 import java.util.ArrayList;
@@ -30,12 +20,13 @@ public class ArrayListExtended<E> extends ArrayList<E>
 		return value != null && !contains(value) && add(value);
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean addObject(Object obj)
 	{
 		return obj != null && add((E)obj);
 	}
 
-	public ArrayListExtended<E> addAllObject(Collection c)
+	public ArrayListExtended<E> addAllObject(Collection<?> c)
 	{
 		for (Object obj : c.toArray())
 		{
@@ -45,7 +36,7 @@ public class ArrayListExtended<E> extends ArrayList<E>
 		return this;
 	}
 
-	public ArrayListExtended<E> addAllObject(Iterable iterable)
+	public ArrayListExtended<E> addAllObject(Iterable<?> iterable)
 	{
 		for (Object obj : iterable)
 		{

@@ -1,13 +1,3 @@
-/*
- * Crafting EX
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
- */
-
 package craftingex.client.gui;
 
 import java.io.IOException;
@@ -31,8 +21,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiCraftingResult extends GuiScreen
 {
 	private final GuiCraftingEX parent;
@@ -57,8 +49,6 @@ public class GuiCraftingResult extends GuiScreen
 	@Override
 	public void initGui()
 	{
-		Keyboard.enableRepeatEvents(true);
-
 		if (itemList == null)
 		{
 			itemList = new ItemList();
@@ -156,15 +146,7 @@ public class GuiCraftingResult extends GuiScreen
 	}
 
 	@Override
-	public void onGuiClosed()
-	{
-		super.onGuiClosed();
-
-		Keyboard.enableRepeatEvents(false);
-	}
-
-	@Override
-	protected void keyTyped(char c, int code)
+	protected void keyTyped(char c, int code) throws IOException
 	{
 		if (filterTextField.isFocused())
 		{
@@ -254,15 +236,15 @@ public class GuiCraftingResult extends GuiScreen
 
 	protected class ItemList extends GuiListSlot<ItemStack>
 	{
-		private final ArrayListExtended<ItemStack> items = new ArrayListExtended<>();
-		private final ArrayListExtended<ItemStack> contents = new ArrayListExtended<>();
-		private ItemStack selected;
+		protected final ArrayListExtended<ItemStack> items = new ArrayListExtended<>();
+		protected final ArrayListExtended<ItemStack> contents = new ArrayListExtended<>();
 
+		protected ItemStack selected;
 		protected int nameType;
 
 		private boolean clickFlag;
 
-		public ItemList()
+		protected ItemList()
 		{
 			super(GuiCraftingResult.this.mc, 0, 0, 0, 0, 22);
 
@@ -359,7 +341,7 @@ public class GuiCraftingResult extends GuiScreen
 				switch (nameType)
 				{
 					case 1:
-						name = GameData.getItemRegistry().getNameForObject(entry.getItem()).toString();
+						name = entry.getItem().getRegistryName().toString();
 						break;
 					case 2:
 						name = entry.getUnlocalizedName();

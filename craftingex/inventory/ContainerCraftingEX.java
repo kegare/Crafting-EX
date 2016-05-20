@@ -1,24 +1,14 @@
-/*
- * Crafting EX
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
- */
-
 package craftingex.inventory;
 
 import java.util.List;
 
+import craftingex.crafting.CraftingManagerEX;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import craftingex.crafting.CraftingManagerEX;
 
 public class ContainerCraftingEX extends ContainerWorkbench
 {

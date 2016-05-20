@@ -1,49 +1,40 @@
-/*
- * Crafting EX
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
- */
-
 package craftingex.handler;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import craftingex.core.CraftingEX;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import craftingex.core.CraftingEX;
 
 public class CraftingEventHooks
 {
-	public static final CraftingEventHooks instance = new CraftingEventHooks();
-
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onPlayerInteract(PlayerInteractEvent event)
+	public void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event)
 	{
-		if (event.action == Action.RIGHT_CLICK_BLOCK && event.entityPlayer instanceof EntityPlayerMP)
+		EntityPlayer player = event.getEntityPlayer();
+		World world = player.worldObj;
+
+		if (!world.isRemote)
 		{
-			EntityPlayerMP player = (EntityPlayerMP)event.entityPlayer;
-			WorldServer world = player.getServerForPlayer();
-			BlockPos pos = event.pos;
+			BlockPos pos = event.getPos();
 
-			if (world.getBlockState(pos).getBlock() == Blocks.crafting_table && (!player.isSneaking() || player.getHeldItem() == null || player.getHeldItem().getItem().doesSneakBypassUse(world, pos, player)))
+			if (world.getBlockState(pos).getBlock() == Blocks.CRAFTING_TABLE)
 			{
-				ItemStack current = player.getCurrentEquippedItem();
+				ItemStack itemstack = event.getItemStack();
 
-				if (current == null || current.getItem() != Item.getItemFromBlock(Blocks.crafting_table))
+				if (!player.isSneaking() || itemstack == null || itemstack.getItem().doesSneakBypassUse(itemstack, world, pos, player))
 				{
-					player.openGui(CraftingEX.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+					if (itemstack == null || itemstack.getItem() != Item.getItemFromBlock(Blocks.CRAFTING_TABLE))
+					{
+						player.openGui(CraftingEX.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 
-					event.setCanceled(true);
+						event.setCanceled(true);
+					}
 				}
 			}
 		}

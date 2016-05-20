@@ -1,13 +1,3 @@
-/*
- * Crafting EX
- *
- * Copyright (c) 2014 kegare
- * https://github.com/kegare
- *
- * This mod is distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
- * Please check the contents of the license located in http://www.mod-buildcraft.com/MMPL-1.0.txt
- */
-
 package craftingex.client.gui;
 
 import java.io.IOException;
@@ -31,8 +21,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiCraftingEX extends GuiContainer
 {
 	private static final ResourceLocation craftingTableGuiTextures = new ResourceLocation("textures/gui/container/crafting_table.png");
-	private static final ItemStack craftingIconItem = new ItemStack(Blocks.crafting_table);
+	private static final ItemStack craftingIconItem = new ItemStack(Blocks.CRAFTING_TABLE);
 
 	private final ContainerCraftingEX container;
 	private final BlockPos pos;
