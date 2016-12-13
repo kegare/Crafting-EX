@@ -31,8 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiCraftingEX extends GuiContainer
 {
-	private static final ResourceLocation craftingTableGuiTextures = new ResourceLocation("textures/gui/container/crafting_table.png");
-	private static final ItemStack craftingIconItem = new ItemStack(Blocks.CRAFTING_TABLE);
+	private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURE = new ResourceLocation("textures/gui/container/crafting_table.png");
+	private static final ItemStack CRAFTING_TABLE = new ItemStack(Blocks.CRAFTING_TABLE);
 
 	private final ContainerCraftingEX container;
 	private final BlockPos pos;
@@ -117,10 +117,7 @@ public class GuiCraftingEX extends GuiContainer
 		{
 			ItemStack stack = container.getNextRecipe(i);
 
-			if (stack != null)
-			{
-				drawCreativeTabHoveringText(stack.getDisplayName(), mouseX, mouseY);
-			}
+			drawCreativeTabHoveringText(stack.getDisplayName(), mouseX, mouseY);
 		}
 
 		if (container.isRecipes() && mouseX >= guiLeft + recipesX - 5 && mouseX <= guiLeft + xSize - 5 && mouseY >= guiTop + recipesY - 4 && mouseY <= guiTop + recipesY + 10)
@@ -156,7 +153,7 @@ public class GuiCraftingEX extends GuiContainer
 			GlStateManager.scale(0.82F, 0.82F, 1.0F);
 			RenderHelper.enableGUIStandardItemLighting();
 			itemRender.zLevel = 100.0F;
-			itemRender.renderItemAndEffectIntoGUI(craftingIconItem, 6, 6);
+			itemRender.renderItemAndEffectIntoGUI(CRAFTING_TABLE, 6, 6);
 			itemRender.zLevel = 0.0F;
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.popMatrix();
@@ -167,7 +164,7 @@ public class GuiCraftingEX extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float ticks, int mouseX, int mouseY)
 	{
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(craftingTableGuiTextures);
+		mc.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURE);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
@@ -193,7 +190,7 @@ public class GuiCraftingEX extends GuiContainer
 				return;
 		}
 
-		CraftingEX.network.sendToServer(new NextRecipeMessage(next));
+		CraftingEX.NETWORK.sendToServer(new NextRecipeMessage(next));
 
 		container.nextRecipe(next);
 	}
@@ -207,7 +204,7 @@ public class GuiCraftingEX extends GuiContainer
 		int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
 		Slot slot = container.getSlot(0);
 
-		if (isPointInRegion(slot.xDisplayPosition - 5, slot.yDisplayPosition - 5, 21, 21, mouseX, mouseY))
+		if (isPointInRegion(slot.xPos - 5, slot.yPos - 5, 21, 21, mouseX, mouseY))
 		{
 			int wheel = Mouse.getDWheel();
 
@@ -238,7 +235,7 @@ public class GuiCraftingEX extends GuiContainer
 				items[i] = container.craftMatrix.removeStackFromSlot(i);
 			}
 
-			CraftingEX.network.sendToServer(new OpenCraftingMessage(pos, items));
+			CraftingEX.NETWORK.sendToServer(new OpenCraftingMessage(pos, items));
 		}
 		else if (code == 0 && mouseX <= guiLeft + xSize && mouseX >=guiLeft + xSize - 50 && mouseY >= guiTop && mouseY <= guiTop + 20 && container.isRecipes())
 		{
@@ -282,7 +279,7 @@ public class GuiCraftingEX extends GuiContainer
 		{
 			if (ItemStack.areItemStacksEqual(stack, container.getNextRecipe(i)))
 			{
-				CraftingEX.network.sendToServer(new NextRecipeMessage(i));
+				CraftingEX.NETWORK.sendToServer(new NextRecipeMessage(i));
 
 				container.nextRecipe(i);
 

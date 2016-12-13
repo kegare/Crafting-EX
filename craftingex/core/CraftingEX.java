@@ -30,13 +30,13 @@ public class CraftingEX
 
 	private static ForkJoinPool pool;
 
-	public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel("craftingex");
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("craftingex");
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		network.registerMessage(NextRecipeMessage.class, NextRecipeMessage.class, 0, Side.SERVER);
-		network.registerMessage(OpenCraftingMessage.class, OpenCraftingMessage.class, 1, Side.SERVER);
+		NETWORK.registerMessage(NextRecipeMessage.class, NextRecipeMessage.class, 0, Side.SERVER);
+		NETWORK.registerMessage(OpenCraftingMessage.class, OpenCraftingMessage.class, 1, Side.SERVER);
 	}
 
 	@EventHandler
@@ -63,11 +63,6 @@ public class CraftingEX
 		return pool;
 	}
 
-	public static int compareWithNull(Object o1, Object o2)
-	{
-		return (o1 == null ? 1 : 0) - (o2 == null ? 1 : 0);
-	}
-
 	public static boolean containsIgnoreCase(String s1, String s2)
 	{
 		if (Strings.isNullOrEmpty(s1) || Strings.isNullOrEmpty(s2))
@@ -80,7 +75,7 @@ public class CraftingEX
 
 	public static boolean itemFilter(ItemStack itemstack, String filter)
 	{
-		if (itemstack == null || itemstack.getItem() == null || Strings.isNullOrEmpty(filter))
+		if (itemstack.isEmpty() || Strings.isNullOrEmpty(filter))
 		{
 			return false;
 		}

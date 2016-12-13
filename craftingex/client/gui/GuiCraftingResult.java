@@ -1,13 +1,10 @@
 package craftingex.client.gui;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
 
 import org.lwjgl.input.Keyboard;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -20,6 +17,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,22 +26,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiCraftingResult extends GuiScreen
 {
 	private final GuiCraftingEX parent;
-	private final Collection<ItemStack> results;
+	private final NonNullList<ItemStack> results;
 
 	private ItemList itemList;
 	private GuiButton doneButton;
 	private GuiTextField filterTextField;
 
-	public GuiCraftingResult(GuiCraftingEX parent, Collection<ItemStack> results)
+	public GuiCraftingResult(GuiCraftingEX parent, NonNullList<ItemStack> results)
 	{
 		this.parent = parent;
 		this.results = results;
-	}
-
-	public GuiCraftingResult(GuiCraftingEX parent, ItemStack... results)
-	{
-		this.parent = parent;
-		this.results = Lists.newArrayList(results);
 	}
 
 	@Override
@@ -252,13 +244,10 @@ public class GuiCraftingResult extends GuiScreen
 			{
 				for (ItemStack stack : results)
 				{
-					if (stack != null)
-					{
-						ItemStack entry = stack.copy();
+					ItemStack entry = stack.copy();
 
-						items.add(entry);
-						contents.add(entry);
-					}
+					items.add(entry);
+					contents.add(entry);
 				}
 			}
 		}
@@ -297,9 +286,9 @@ public class GuiCraftingResult extends GuiScreen
 				return;
 			}
 
-			ItemStack entry = contents.get(slotIndex, null);
+			ItemStack entry = contents.get(slotIndex, ItemStack.EMPTY);
 
-			if (entry != null)
+			if (!entry.isEmpty())
 			{
 				selected = entry;
 			}
@@ -313,9 +302,9 @@ public class GuiCraftingResult extends GuiScreen
 		@Override
 		protected boolean isSelected(int slotIndex)
 		{
-			ItemStack entry = contents.get(slotIndex, null);
+			ItemStack entry = contents.get(slotIndex, ItemStack.EMPTY);
 
-			return entry != null && selected != null && entry == selected;
+			return !entry.isEmpty() && selected != null && entry == selected;
 		}
 
 		@Override
@@ -327,9 +316,9 @@ public class GuiCraftingResult extends GuiScreen
 		@Override
 		protected void drawSlot(int slotIndex, int par2, int par3, int par4, int mouseX, int mouseY)
 		{
-			ItemStack entry = contents.get(slotIndex, null);
+			ItemStack entry = contents.get(slotIndex, ItemStack.EMPTY);
 
-			if (entry == null)
+			if (entry.isEmpty())
 			{
 				return;
 			}
@@ -369,47 +358,27 @@ public class GuiCraftingResult extends GuiScreen
 			RenderHelper.disableStandardItemLighting();
 		}
 
-		protected void setFilter(final String filter)
+		protected void setFilter(String filter)
 		{
-			CraftingEX.getPool().execute(new RecursiveAction()
+			CraftingEX.getPool().execute(() ->
 			{
-				@Override
-				protected void compute()
+				List<ItemStack> result;
+
+				if (Strings.isNullOrEmpty(filter))
 				{
-					List<ItemStack> result;
+					result = items;
+				}
+				else
+				{
+					result = Lists.newArrayList(Collections2.filter(items, stack -> CraftingEX.itemFilter(stack, filter)));
+				}
 
-					if (Strings.isNullOrEmpty(filter))
-					{
-						result = items;
-					}
-					else
-					{
-						result = Lists.newArrayList(Collections2.filter(items, new ItemFilter(filter)));
-					}
-
-					if (!contents.equals(result))
-					{
-						contents.clear();
-						contents.addAll(result);
-					}
+				if (!contents.equals(result))
+				{
+					contents.clear();
+					contents.addAll(result);
 				}
 			});
-		}
-	}
-
-	protected class ItemFilter implements Predicate<ItemStack>
-	{
-		private final String filter;
-
-		public ItemFilter(String filter)
-		{
-			this.filter = filter;
-		}
-
-		@Override
-		public boolean apply(ItemStack stack)
-		{
-			return CraftingEX.itemFilter(stack, filter);
 		}
 	}
 }

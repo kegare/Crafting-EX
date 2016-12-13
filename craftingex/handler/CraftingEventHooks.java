@@ -17,7 +17,7 @@ public class CraftingEventHooks
 	public void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
-		World world = player.worldObj;
+		World world = player.world;
 
 		if (!world.isRemote)
 		{
@@ -27,9 +27,9 @@ public class CraftingEventHooks
 			{
 				ItemStack itemstack = event.getItemStack();
 
-				if (!player.isSneaking() || itemstack == null || itemstack.getItem().doesSneakBypassUse(itemstack, world, pos, player))
+				if (!player.isSneaking() || itemstack.isEmpty() || itemstack.getItem().doesSneakBypassUse(itemstack, world, pos, player))
 				{
-					if (itemstack == null || itemstack.getItem() != Item.getItemFromBlock(Blocks.CRAFTING_TABLE))
+					if (itemstack.isEmpty() || itemstack.getItem() != Item.getItemFromBlock(Blocks.CRAFTING_TABLE))
 					{
 						player.openGui(CraftingEX.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 

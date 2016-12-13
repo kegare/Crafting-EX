@@ -34,7 +34,7 @@ public abstract class GuiListSlot<E> extends GuiSlot
 	@Override
 	protected void drawContainerBackground(Tessellator tessellator)
 	{
-		if (mc.theWorld != null)
+		if (mc.world != null)
 		{
 			Gui.drawRect(left, top, right, bottom, 0x101010);
 		}

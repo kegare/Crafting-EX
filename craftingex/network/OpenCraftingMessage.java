@@ -59,7 +59,7 @@ public class OpenCraftingMessage implements IMessage, IMessageHandler<OpenCrafti
 	{
 		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 
-		player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.worldObj, new BlockPos(message.x, message.y, message.z)));
+		player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.world, new BlockPos(message.x, message.y, message.z)));
 
 		if (player.openContainer != null && player.openContainer instanceof ContainerWorkbench)
 		{

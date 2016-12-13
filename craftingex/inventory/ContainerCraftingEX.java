@@ -1,12 +1,11 @@
 package craftingex.inventory;
 
-import java.util.List;
-
 import craftingex.crafting.CraftingManagerEX;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -14,7 +13,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 {
 	private final World world;
 
-	private List<ItemStack> recipes;
+	private NonNullList<ItemStack> recipes;
 
 	private int recipeSize, currentIndex;
 
@@ -27,7 +26,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	@Override
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
-		List<ItemStack> prev = recipes;
+		NonNullList<ItemStack> prev = recipes;
 		recipes = CraftingManagerEX.getInstance().findMatchingRecipe(craftMatrix, world);
 
 		if (recipes != null)
@@ -36,16 +35,13 @@ public class ContainerCraftingEX extends ContainerWorkbench
 			{
 				ItemStack item = prev.get(currentIndex);
 
-				if (item != null)
+				for (ItemStack itemstack : recipes)
 				{
-					for (ItemStack itemstack : recipes)
+					if (item.isItemEqual(itemstack))
 					{
-						if (itemstack != null && item.isItemEqual(itemstack))
-						{
-							craftResult.setInventorySlotContents(0, recipes.get(currentIndex));
+						craftResult.setInventorySlotContents(0, recipes.get(currentIndex));
 
-							return;
-						}
+						return;
 					}
 				}
 			}
@@ -58,7 +54,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 		{
 			recipeSize = -1;
 			currentIndex = -1;
-			craftResult.setInventorySlotContents(0, null);
+			craftResult.setInventorySlotContents(0, ItemStack.EMPTY);
 		}
 	}
 
@@ -77,7 +73,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	{
 		if (currentIndex < 0)
 		{
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		return recipes.get((currentIndex + value + recipeSize) % recipeSize);
@@ -88,7 +84,7 @@ public class ContainerCraftingEX extends ContainerWorkbench
 		return recipeSize > 1;
 	}
 
-	public List<ItemStack> getRecipes()
+	public NonNullList<ItemStack> getRecipes()
 	{
 		return recipes;
 	}

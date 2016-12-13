@@ -1,14 +1,11 @@
 package craftingex.crafting;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public class CraftingManagerEX
@@ -20,43 +17,41 @@ public class CraftingManagerEX
 		return instance;
 	}
 
-	public List<ItemStack> findMatchingRecipe(InventoryCrafting crafting, World world)
+	public NonNullList<ItemStack> findMatchingRecipe(InventoryCrafting crafting, World world)
 	{
-		List<ItemStack> result = Lists.newArrayList();
+		NonNullList<ItemStack> result = NonNullList.create();
 
 		int i = 0;
-		ItemStack itemstack1 = null;
-		ItemStack itemstack2 = null;
+		ItemStack itemstack1 = ItemStack.EMPTY;
+		ItemStack itemstack2 = ItemStack.EMPTY;
 
 		outside: for (int j = 0; j < crafting.getSizeInventory(); ++j)
 		{
 			ItemStack itemstack = crafting.getStackInSlot(j);
 
-			if (itemstack != null)
+			switch (i)
 			{
-				switch (i)
-				{
-					case 0:
-						itemstack1 = itemstack;
-						break;
-					case 1:
-						itemstack2 = itemstack;
-						break;
-					default:
-						break outside;
-				}
-
-				++i;
+				case 0:
+					itemstack1 = itemstack;
+					break;
+				case 1:
+					itemstack2 = itemstack;
+					break;
+				default:
+					break outside;
 			}
+
+			++i;
 		}
 
-		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.stackSize == 1 && itemstack2.stackSize == 1 && itemstack1.getItem().isRepairable())
+		if (i == 2 && itemstack1.getItem() == itemstack2.getItem() && itemstack1.getCount() == 1 && itemstack2.getCount() == 1 && itemstack1.getItem().isRepairable())
 		{
 			Item item = itemstack1.getItem();
-			int var1 = item.getMaxDamage() - itemstack1.getItemDamage();
-			int var2 = item.getMaxDamage() - itemstack2.getItemDamage();
-			int var3 = var1 + var2 + item.getMaxDamage() * 5 / 100;
-			int var4 = item.getMaxDamage() - var3;
+			int maxDamage = itemstack1.getMaxDamage();
+			int var1 = maxDamage - itemstack1.getItemDamage();
+			int var2 = maxDamage - itemstack2.getItemDamage();
+			int var3 = var1 + var2 + maxDamage * 5 / 100;
+			int var4 = maxDamage - var3;
 
 			if (var4 < 0)
 			{
@@ -68,28 +63,23 @@ public class CraftingManagerEX
 			return result;
 		}
 
-		search: for (Object obj : CraftingManager.getInstance().getRecipeList())
+		search: for (IRecipe recipe : CraftingManager.getInstance().getRecipeList())
 		{
-			if (obj instanceof IRecipe)
+			if (recipe.matches(crafting, world))
 			{
-				IRecipe recipe = (IRecipe)obj;
+				itemstack1 = recipe.getCraftingResult(crafting);
 
-				if (recipe.matches(crafting, world))
+				if (!result.contains(itemstack1))
 				{
-					itemstack1 = recipe.getCraftingResult(crafting);
-
-					if (itemstack1 != null && !result.contains(itemstack1))
+					for (ItemStack item : result)
 					{
-						for (ItemStack item : result)
+						if (ItemStack.areItemStacksEqual(item, itemstack1))
 						{
-							if (ItemStack.areItemStacksEqual(item, itemstack1))
-							{
-								continue search;
-							}
+							continue search;
 						}
-
-						result.add(itemstack1);
 					}
+
+					result.add(itemstack1);
 				}
 			}
 		}
