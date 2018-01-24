@@ -8,10 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class OpenCraftingMessage implements IMessage, IMessageHandler<OpenCraftingMessage, IMessage>
+public class OpenCraftingMessage implements IPlayerMessage<OpenCraftingMessage, IMessage>
 {
 	private int x, y, z;
 	private ItemStack[] items;
@@ -27,44 +25,40 @@ public class OpenCraftingMessage implements IMessage, IMessageHandler<OpenCrafti
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buffer)
+	public void fromBytes(ByteBuf buf)
 	{
-		x = buffer.readInt();
-		y = buffer.readInt();
-		z = buffer.readInt();
-		items = new ItemStack[buffer.readInt()];
+		x = buf.readInt();
+		y = buf.readInt();
+		z = buf.readInt();
+		items = new ItemStack[buf.readInt()];
 
 		for (int i = 0; i < items.length; ++i)
 		{
-			items[i] = ByteBufUtils.readItemStack(buffer);
+			items[i] = ByteBufUtils.readItemStack(buf);
 		}
 	}
 
 	@Override
-	public void toBytes(ByteBuf buffer)
+	public void toBytes(ByteBuf buf)
 	{
-		buffer.writeInt(x);
-		buffer.writeInt(y);
-		buffer.writeInt(z);
-		buffer.writeInt(items.length);
+		buf.writeInt(x);
+		buf.writeInt(y);
+		buf.writeInt(z);
+		buf.writeInt(items.length);
 
 		for (ItemStack item : items)
 		{
-			ByteBufUtils.writeItemStack(buffer, item);
+			ByteBufUtils.writeItemStack(buf, item);
 		}
 	}
 
 	@Override
-	public IMessage onMessage(OpenCraftingMessage message, MessageContext ctx)
+	public IMessage process(EntityPlayerMP player)
 	{
-		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-
-		player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.world, new BlockPos(message.x, message.y, message.z)));
+		player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.world, new BlockPos(x, y, z)));
 
 		if (player.openContainer != null && player.openContainer instanceof ContainerWorkbench)
 		{
-			ItemStack[] items = message.items;
-
 			for (int i = 0; i < items.length; ++i)
 			{
 				player.openContainer.getSlot(i + 1).putStack(items[i]);

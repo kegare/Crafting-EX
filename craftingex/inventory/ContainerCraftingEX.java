@@ -27,17 +27,17 @@ public class ContainerCraftingEX extends ContainerWorkbench
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
 		NonNullList<ItemStack> prev = recipes;
-		recipes = CraftingManagerEX.getInstance().findMatchingRecipe(craftMatrix, world);
+		recipes = CraftingManagerEX.findMatchingRecipe(craftMatrix, world);
 
 		if (recipes != null)
 		{
 			if (prev != null)
 			{
-				ItemStack item = prev.get(currentIndex);
+				ItemStack stack = prev.get(currentIndex);
 
-				for (ItemStack itemstack : recipes)
+				for (ItemStack output : recipes)
 				{
-					if (item.isItemEqual(itemstack))
+					if (stack.isItemEqual(output))
 					{
 						craftResult.setInventorySlotContents(0, recipes.get(currentIndex));
 

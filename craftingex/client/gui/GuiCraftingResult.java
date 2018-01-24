@@ -53,20 +53,20 @@ public class GuiCraftingResult extends GuiScreen
 			doneButton = new GuiButtonExt(0, 0, 0, 145, 20, I18n.format("gui.done"));
 		}
 
-		doneButton.xPosition = width / 2 + 10;
-		doneButton.yPosition = height - doneButton.height - 4;
+		doneButton.x = width / 2 + 10;
+		doneButton.y = height - doneButton.height - 4;
 
 		buttonList.clear();
 		buttonList.add(doneButton);
 
 		if (filterTextField == null)
 		{
-			filterTextField = new GuiTextField(1, fontRendererObj, 0, 0, 150, 16);
+			filterTextField = new GuiTextField(1, fontRenderer, 0, 0, 150, 16);
 			filterTextField.setMaxStringLength(100);
 		}
 
-		filterTextField.xPosition = width / 2 - filterTextField.width - 5;
-		filterTextField.yPosition = height - filterTextField.height - 6;
+		filterTextField.x = width / 2 - filterTextField.width - 5;
+		filterTextField.y = height - filterTextField.height - 6;
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class GuiCraftingResult extends GuiScreen
 
 		itemList.drawScreen(mouseX, mouseY, ticks);
 
-		drawCenteredString(fontRendererObj, I18n.format("craftingex.result.select"), width / 2, 15, 0xFFFFFF);
+		drawCenteredString(fontRenderer, I18n.format("craftingex.result.select"), width / 2, 15, 0xFFFFFF);
 
 		super.drawScreen(mouseX, mouseY, ticks);
 
@@ -314,7 +314,7 @@ public class GuiCraftingResult extends GuiScreen
 		}
 
 		@Override
-		protected void drawSlot(int slotIndex, int par2, int par3, int par4, int mouseX, int mouseY)
+		protected void drawSlot(int slotIndex, int xPos, int yPos, int height, int mouseX, int mouseY, float partialTicks)
 		{
 			ItemStack entry = contents.get(slotIndex, ItemStack.EMPTY);
 
@@ -345,40 +345,37 @@ public class GuiCraftingResult extends GuiScreen
 
 			if (!Strings.isNullOrEmpty(name))
 			{
-				GuiCraftingResult.this.drawCenteredString(GuiCraftingResult.this.fontRendererObj, name, width / 2, par3 + 3, 0xFFFFFF);
+				GuiCraftingResult.this.drawCenteredString(GuiCraftingResult.this.fontRenderer, name, width / 2, yPos + 3, 0xFFFFFF);
 			}
 
 			RenderHelper.enableGUIStandardItemLighting();
 			int x = width / 2 - 100;
-			int y = par3 + 1;
+			int y = yPos + 1;
 			GuiCraftingResult.this.itemRender.zLevel = 100.0F;
 			GuiCraftingResult.this.itemRender.renderItemAndEffectIntoGUI(entry, x, y);
-			GuiCraftingResult.this.itemRender.renderItemOverlays(GuiCraftingResult.this.fontRendererObj, entry, x, y);
+			GuiCraftingResult.this.itemRender.renderItemOverlays(GuiCraftingResult.this.fontRenderer, entry, x, y);
 			GuiCraftingResult.this.itemRender.zLevel = 0.0F;
 			RenderHelper.disableStandardItemLighting();
 		}
 
 		protected void setFilter(String filter)
 		{
-			CraftingEX.getPool().execute(() ->
+			List<ItemStack> result;
+
+			if (Strings.isNullOrEmpty(filter))
 			{
-				List<ItemStack> result;
+				result = items;
+			}
+			else
+			{
+				result = Lists.newArrayList(Collections2.filter(items, stack -> CraftingEX.itemFilter(stack, filter)));
+			}
 
-				if (Strings.isNullOrEmpty(filter))
-				{
-					result = items;
-				}
-				else
-				{
-					result = Lists.newArrayList(Collections2.filter(items, stack -> CraftingEX.itemFilter(stack, filter)));
-				}
-
-				if (!contents.equals(result))
-				{
-					contents.clear();
-					contents.addAll(result);
-				}
-			});
+			if (!contents.equals(result))
+			{
+				contents.clear();
+				contents.addAll(result);
+			}
 		}
 	}
 }

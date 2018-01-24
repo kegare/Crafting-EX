@@ -4,10 +4,8 @@ import craftingex.inventory.ContainerCraftingEX;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class NextRecipeMessage implements IMessage, IMessageHandler<NextRecipeMessage, IMessage>
+public class NextRecipeMessage implements IPlayerMessage<NextRecipeMessage, IMessage>
 {
 	private int next;
 
@@ -19,25 +17,23 @@ public class NextRecipeMessage implements IMessage, IMessageHandler<NextRecipeMe
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buffer)
+	public void fromBytes(ByteBuf buf)
 	{
-		next = buffer.readInt();
+		next = buf.readInt();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buffer)
+	public void toBytes(ByteBuf buf)
 	{
-		buffer.writeInt(next);
+		buf.writeInt(next);
 	}
 
 	@Override
-	public IMessage onMessage(NextRecipeMessage message, MessageContext ctx)
+	public IMessage process(EntityPlayerMP player)
 	{
-		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-
 		if (player.openContainer != null && player.openContainer instanceof ContainerCraftingEX)
 		{
-			((ContainerCraftingEX)player.openContainer).nextRecipe(message.next);
+			((ContainerCraftingEX)player.openContainer).nextRecipe(next);
 		}
 
 		return null;

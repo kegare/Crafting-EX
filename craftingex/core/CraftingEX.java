@@ -1,7 +1,6 @@
 package craftingex.core;
 
 import java.util.Map;
-import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Strings;
@@ -22,13 +21,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "craftingex")
+@Mod(modid = "craftingex", acceptedMinecraftVersions = "[1.12,)")
 public class CraftingEX
 {
 	@Instance("craftingex")
 	public static CraftingEX instance;
-
-	private static ForkJoinPool pool;
 
 	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("craftingex");
 
@@ -51,16 +48,6 @@ public class CraftingEX
 	public boolean netCheckHandler(Map<String, String> mods, Side side)
 	{
 		return true;
-	}
-
-	public static ForkJoinPool getPool()
-	{
-		if (pool == null || pool.isShutdown())
-		{
-			pool = new ForkJoinPool();
-		}
-
-		return pool;
 	}
 
 	public static boolean containsIgnoreCase(String s1, String s2)

@@ -1,5 +1,7 @@
 package craftingex.crafting;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,14 +12,8 @@ import net.minecraft.world.World;
 
 public class CraftingManagerEX
 {
-	private static final CraftingManagerEX instance = new CraftingManagerEX();
-
-	public static final CraftingManagerEX getInstance()
-	{
-		return instance;
-	}
-
-	public NonNullList<ItemStack> findMatchingRecipe(InventoryCrafting crafting, World world)
+	@Nullable
+	public static NonNullList<ItemStack> findMatchingRecipe(InventoryCrafting crafting, World world)
 	{
 		NonNullList<ItemStack> result = NonNullList.create();
 
@@ -63,7 +59,7 @@ public class CraftingManagerEX
 			return result;
 		}
 
-		search: for (IRecipe recipe : CraftingManager.getInstance().getRecipeList())
+		search: for (IRecipe recipe : CraftingManager.REGISTRY)
 		{
 			if (recipe.matches(crafting, world))
 			{

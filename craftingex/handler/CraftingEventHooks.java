@@ -25,11 +25,11 @@ public class CraftingEventHooks
 
 			if (world.getBlockState(pos).getBlock() == Blocks.CRAFTING_TABLE)
 			{
-				ItemStack itemstack = event.getItemStack();
+				ItemStack stack = event.getItemStack();
 
-				if (!player.isSneaking() || itemstack.isEmpty() || itemstack.getItem().doesSneakBypassUse(itemstack, world, pos, player))
+				if (!player.isSneaking() || stack.isEmpty() || stack.getItem().doesSneakBypassUse(stack, world, pos, player))
 				{
-					if (itemstack.isEmpty() || itemstack.getItem() != Item.getItemFromBlock(Blocks.CRAFTING_TABLE))
+					if (stack.isEmpty() || stack.getItem() != Item.getItemFromBlock(Blocks.CRAFTING_TABLE))
 					{
 						player.openGui(CraftingEX.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 

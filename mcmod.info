@@ -1,23 +1,11 @@
-{
-  "modListVersion": 2,
-  "modList": [
-    {
-      "modid": "craftingex",
-      "name": "Crafting EX",
-      "description": "Crafting Table can crafting duplicated recipes.",
-      "url": "http://kegare.github.io",
-      "updateJSON": "",
-      "logoFile": "logo.png",
-      "version": "1.1.2",
-      "credits": "Authored by kegare",
-      "parent": "",
-      "authorList": [
-        "kegare"
-      ],
-      "requiredMods": [],
-      "dependencies": [],
-      "dependants": [],
-      "useDependencyInformation": "true"
-    }
-  ]
-}
+[{
+  "modid": "craftingex",
+  "name": "Crafting EX",
+  "description": "Duplicated recipes will be able to craft with a vanilla crafting table.",
+  "version": "1.2.0",
+  "logoFile": "logo.png",
+  "url": "https://minecraft.curseforge.com/projects/cavern2",
+  "authorList": ["kegare"],
+  "credits": "Authored by kegare",
+  "useDependencyInformation": true
+}]
